@@ -22,15 +22,11 @@ import java.util.function.Function;
 /**
  * Created by alexandremasanes on 21/02/2017.
  */
-@Repository("dao")
+@Singleton("dao")
 public final class DAOImpl implements DAO {
 
-    private final Session session;
-
-    @Autowired
-    public DAOImpl(SessionFactory sessionFactory){
-        session = sessionFactory.openSession();
-    }
+    @Inject
+    private Session session;
 
 
     @Override
