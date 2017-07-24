@@ -1,6 +1,6 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
-import app.core.business.model.mapping.sinister.PlainSinister;
+import business.model.mapping.sinister.PlainSinister;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -19,7 +19,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "types_garantie")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Insurance extends IdentifiableByIdImpl {
 
     @XmlAttribute

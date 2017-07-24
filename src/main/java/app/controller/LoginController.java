@@ -21,31 +21,39 @@ public class LoginController extends BaseController {
     private MainController mainController;
 
     @Inject
+    private PasswordRetrievalController passordRetrievalController;
+
+    @Inject
     private LoginForm loginForm;
 
     @Inject
     private UserAccountService userAccountService;
 
+
     @Override
     @PostConstruct
     public void init() {
         loginForm.getButton().addActionListener(this);
+        loginForm.getLostPwdButton().addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) { System.out.println(loginForm.getEmailAddressField().getText() +'\n'+ loginForm.getPasswordField().getText());
-        try {
-            userAccountService.logIn(
-                    userSession,
-                    loginForm.getEmailAddressField().getText(),
-                    loginForm.getPasswordField().getText()
-            );
+        if(e.getSource() == loginForm.getButton())
+            try {
+                userAccountService.logIn(
+                        userSession,
+                        loginForm.getEmailAddressField().getText(),
+                        loginForm.getPasswordField().getText()
+                );
 
-            forward(mainController);
+                forward(mainController);
 
-        }catch (ServiceException ex) {
-            warn(ex.getNotification());
-        }
+            }catch (ServiceException ex) {
+                warn(ex.getNotification());
+            }
+        else if(e.getSource() == loginForm.getLostPwdButton())
+            forward(passordRetrievalController);
     }
 
     @Override

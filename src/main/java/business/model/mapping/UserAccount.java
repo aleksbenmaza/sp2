@@ -1,4 +1,4 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import java.io.Serializable;
 
@@ -6,21 +6,19 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import app.core.business.exc.BusinessException;
-import app.core.business.model.mapping.person.Person;
-import app.core.business.model.mapping.person.RegisteredUser;
-import app.core.web.model.session.User;
+import business.exc.BusinessException;
+import business.model.mapping.person.Person;
+import business.model.mapping.person.RegisteredUser;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 
 @Entity
 @Table(name = "comptes_utilisateur")
-public class UserAccount extends app.core.business.model.mapping.Entity implements Serializable {
+public class UserAccount extends business.model.mapping.Entity implements Serializable {
 
 	public static final long serialVersionUID = 1482252304755392540L;
-
-	public static final String SALT           = "#^dza2455ç?";
 
 	@Embeddable
 	public static class Id implements Serializable {
@@ -65,7 +63,7 @@ public class UserAccount extends app.core.business.model.mapping.Entity implemen
 	@Column(name = "api_key", updatable = false)
 	private String apiKey;
 
-	@OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Token token;
 
 	public <T extends Person & RegisteredUser> UserAccount(T user) {

@@ -1,19 +1,18 @@
-package app.core.business.model.dao;
+package business.model.dao;
 
-import static app.util.CommonUtils.replaceIfNull;
+import static util.CommonUtils.replaceIfNull;
 
-import app.core.business.model.mapping.*;
-import app.core.business.model.mapping.Token;
+import business.model.mapping.*;
+import business.model.mapping.Token;
 
 import org.hibernate.*;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.persistence.Table;
 import java.util.*;
 import java.util.function.Consumer;
@@ -22,7 +21,7 @@ import java.util.function.Function;
 /**
  * Created by alexandremasanes on 21/02/2017.
  */
-@Singleton("dao")
+@Singleton
 public final class DAOImpl implements DAO {
 
     @Inject
@@ -33,50 +32,6 @@ public final class DAOImpl implements DAO {
     public void save(Entity entity) {
         commitOrRollback(this::saveAndFlush, entity);
     }
-    /**
-     @Override
-     public void save(Token token) {
-     UserAccount userAccount;
-     String stm;
-     ProcedureCall call;
-     Field field;
-     Object[] results;
-
-     userAccount = token.getUserAccount();
-     stm = "save_or_update_token";
-     call = session.createStoredProcedureCall(stm);
-
-     call.registerParameter(0, Long.class, INOUT)
-     .bindValue(token.getId());
-     call.registerParameter(1, Date.class, OUT);
-     call.registerParameter(2, Date.class, OUT);
-     call.registerParameter(3, String.class, IN)
-     .bindValue(token.getValue());
-     call.registerParameter(4, String.class, IN)
-     .bindValue(token.getApiServer());
-     call.registerParameter(5, Long.class, IN)
-     .bindValue(
-     userAccount != null ?
-     ((Person)userAccount.getUser()).getId() :
-     IdentifiableById.NULL_ID
-     );
-
-     results = commitOrRollback(call::execute, call.getOutputs()::getOutputParameterValue, 0, 1, 2);
-
-     if(results != null && results.length != 0)
-     try {
-     field = Token.class.getField("id");
-     field.setAccessible(true);
-     field.set(token, results[0]);
-     field = Token.class.getField("createdAt");
-     field.setAccessible(true);
-     field.set(token, results[1]);
-     field = Token.class.getField("updatedAt");
-     field.set(token, results[2]);
-     } catch (NoSuchFieldException | IllegalAccessException e) {
-
-     }
-     } */
 
     @Override
     @SuppressWarnings("unchecked")
@@ -154,36 +109,53 @@ public final class DAOImpl implements DAO {
     public List<Model> searchModels(String modelName, long makeId) {
         Query<Model> query;
         String stm = "FROM " + Model.class.getSimpleName() + " " +
-                "WHERE make.id = :id " +
-                "AND   name LIKE :name";
+                     "WHERE make.id = :id " +
+                     "AND   name LIKE :name";
         query = session.createQuery(stm);
         query.setParameter("id", makeId)
-                .setParameter("name", modelName+"%");
+             .setParameter("name", modelName + "%");
         return query.list();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public UserAccount findUserAccount(String email) {
+        String stm;
+        Query<UserAccount> query;
+
+        stm = "FROM " + UserAccount.class.getSimpleName() + " "
+                + "WHERE email = :email ";
+
+        query = session.createQuery(stm);
+        query.setParameter("email", email);
+
+        return query.uniqueResult();
+    }
 
     @Override
-    public boolean refresh(Entity entity) {
+    public IdentifiableByIdImpl refresh(IdentifiableByIdImpl entity) {
         try {
-            session.refresh(entity);
-            return true;
+            Query<IdentifiableByIdImpl> query;
+            String stm;
+            stm = "FROM " + entity.getClass().getSimpleName() + "" +
+                    " WHERE id = " + ((IdentifiableById)entity).getId();
+
+            return (IdentifiableByIdImpl) session.createQuery(stm).uniqueResult();
         } catch(UnresolvableObjectException e) {
             session.evict(entity);
-            return false;
+            return null;
         }
     }
 
-
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends IdentifiableByIdImpl> boolean  exists(Class<T> entityClass, long id) {
+    public <T extends IdentifiableByIdImpl> boolean exists(Class<T> entityClass, long id) {
         String stm;
         Query<Boolean> query;
 
         stm = "SELECT CASE COUNT(e) > 0 THEN TRUE ELSE FALSE END " +
-                "FROM " + entityClass.getSimpleName() + " e " +
-                "WHERE id = :id";
+              "FROM " + entityClass.getSimpleName() + " e " +
+              "WHERE id = :id";
         query = session.createQuery(stm);
         query.setParameter("id", id);
 
@@ -197,8 +169,8 @@ public final class DAOImpl implements DAO {
         Query<Boolean> query;
 
         stm = "SELECT CASE WHEN COUNT(email) > 0 THEN TRUE ELSE FALSE END " +
-                "FROM " + UserAccount.class.getSimpleName() + " " +
-                "WHERE email = :email";
+              "FROM " + UserAccount.class.getSimpleName() + " " +
+              "WHERE email = :email";
         query = session.createQuery(stm);
         query.setParameter("email", email);
 
@@ -225,13 +197,29 @@ public final class DAOImpl implements DAO {
         Query<UserAccount> query;
         UserAccount result;
         String stm = "FROM " + UserAccount.class.getSimpleName() + " " +
-                "WHERE email = :email " +
-                "AND   hash  = :hash ";
+                     "WHERE email = :email " +
+                     "AND   hash  = :hash ";
         query = session.createQuery(stm);
+
         query.setParameter("email", email);
         query.setParameter("hash", hash);
-        result = query.uniqueResult();
-        return result;
+
+        return query.uniqueResult();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Vehicle findVehicleByRegistrationNumber(String registrationNumber) {
+        Query<Vehicle> query;
+
+        String stm = "FROM " + Vehicle.class.getSimpleName() + " " +
+                     "WHERE registrationNumber = :registrationNumber";
+
+        query = session.createQuery(stm);
+
+        query.setParameter("registrationNumber", registrationNumber);
+
+        return query.uniqueResult();
     }
 
     @Override

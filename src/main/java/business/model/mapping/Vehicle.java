@@ -1,10 +1,10 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 
-import app.core.business.model.mapping.person.insuree.Insuree;
-import app.core.business.model.mapping.sinister.Sinister;
+import business.model.mapping.person.insuree.Insuree;
+import business.model.mapping.sinister.Sinister;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -56,6 +56,9 @@ public class Vehicle extends IdentifiableByIdImpl {
 
 	@OneToMany(targetEntity = Sinister.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sinister> sinisters;
+
+	public Vehicle() {
+	}
 
 	public Vehicle(Model model) {
 		this.model = requireNonNull(model);
@@ -147,8 +150,5 @@ public class Vehicle extends IdentifiableByIdImpl {
 		if(this.currentContract != null && !this.currentContract.equals(currentContract))
 			this.currentContract.setActive(false);
 		this.currentContract = currentContract;
-	}
-
-	Vehicle() {
 	}
 }

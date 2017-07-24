@@ -1,4 +1,4 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,14 +40,7 @@ public interface IdentifiableById {
 
     long getId();
 
-    int hashCode();
 
-    default boolean equals(IdentifiableById o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        IdentifiableById identifiableById = (IdentifiableById) o;
 
-        return getId() != NULL_ID ? getId() == o.getId() : o.getId() == NULL_ID;
-    }
 }

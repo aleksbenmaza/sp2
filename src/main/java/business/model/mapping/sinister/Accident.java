@@ -1,4 +1,6 @@
-package app.core.business.model.mapping.sinister;
+package business.model.mapping.sinister;
+
+import business.model.mapping.Vehicle;
 
 import javax.persistence.*;
 
@@ -23,6 +25,10 @@ public class Accident extends Sinister {
                                               referencedColumnName = "id")})
     private Accident accident;
 
+    public Accident(Vehicle vehicle) {
+        super(vehicle);
+    }
+
     public float getResponsibilityRate() {
         return responsibilityRate;
     }
@@ -46,5 +52,8 @@ public class Accident extends Sinister {
 
     public void setCasualtiesCount(short casualtiesCount) {
         this.casualtiesCount = casualtiesCount;
+    }
+
+    Accident() {
     }
 }

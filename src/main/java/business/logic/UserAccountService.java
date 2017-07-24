@@ -1,13 +1,14 @@
 package business.logic;
 
 import static util.Hash.*;
-import static business.model.mapping.UserAccount.SALT;
+
 
 import app.UserSession;
 import business.model.mapping.UserAccount;
-import business.model.mapping.person.Admin;
+import business.model.mapping.person.Manager;
 import business.model.mapping.person.RegisteredUser;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.security.NoSuchAlgorithmException;
 
@@ -18,12 +19,14 @@ import java.security.NoSuchAlgorithmException;
 @Singleton
 public class UserAccountService extends BaseService<UserAccount> {
 
+    private String salt;
+
     public void logIn(UserSession userSession, String emailAddress, String password) throws ServiceException {
         RegisteredUser user;
         UserAccount userAccount;
         String toBeHashed;
 
-        toBeHashed  = emailAddress+SALT+password; System.out.println(toBeHashed);
+        toBeHashed  = emailAddress+salt+password; System.out.println(toBeHashed);
 
         try {
             userAccount = dao.findUserAccount(emailAddress, encrypt(toBeHashed, SHA_1));
@@ -31,11 +34,19 @@ public class UserAccountService extends BaseService<UserAccount> {
             throw new ServiceException(getMessage("notification.error"));
         }
 
-        if(userAccount == null || !((user = userAccount.getUser()) instanceof Admin))
+        if(userAccount == null || !((user = userAccount.getUser()) instanceof Manager))
             throw new LoginFailureException(getMessage("notifications.badCredentials"));
 
 
         userSession.setUser(user);
     }
 
+    public UserAccount getUserAccount(String emailAddress) {
+        return dao.findUserAccount(emailAddress);
+    }
+
+    @PostConstruct
+    protected void postConstruct() {
+        salt = dao.getHashSalt();
+    }
 }

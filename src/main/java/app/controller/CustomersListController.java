@@ -5,7 +5,7 @@ import app.ui.View;
 import business.logic.AdminService;
 import business.model.mapping.Contract;
 import business.model.mapping.ToBeChecked;
-import business.model.mapping.person.Admin;
+import business.model.mapping.person.Manager;
 import business.model.mapping.person.insuree.Customer;
 import javafx.scene.control.SelectionModel;
 
@@ -76,10 +76,10 @@ public class CustomersListController extends BaseController implements MouseClic
     }
 
     protected void refreshViewModel() {
-        Admin admin;
+        Manager admin;
 
-        admin = (Admin) userSession.getUser();
-        adminService.refresh(admin);
+        admin = (Manager) userSession.getUser();
+        admin = (Manager) adminService.refresh(admin);
         customersListPanel.setCustomers(admin.getCustomers());
     }
 
@@ -87,11 +87,11 @@ public class CustomersListController extends BaseController implements MouseClic
     public void mouseClicked(MouseEvent e) {
         JTable table;
         long contractId;
-        Admin admin;
+        Manager admin;
 
         table = customersListPanel.getTable();
         if(e.getClickCount() == 2) {
-            admin = (Admin) userSession.getUser();
+            admin = (Manager) userSession.getUser();
             contractId = (Long)table.getValueAt(table.getSelectedRow(),0);
             admin.getCustomers()
                  .stream()
@@ -102,7 +102,9 @@ public class CustomersListController extends BaseController implements MouseClic
     }
 
     private void filter(boolean bool) {
-        Set<Customer> customers = ((Admin) userSession.getUser()).getCustomers();
+        System.out.println("begin");
+        Set<Customer> customers = ((Manager) userSession.getUser()).getCustomers();
+        System.out.println("end");
 
         if(bool) {
             JRadioButton radioButton;
@@ -137,7 +139,7 @@ public class CustomersListController extends BaseController implements MouseClic
                                             || customer.getStatus() == status)
             ).collect(Collectors.toSet());
         }
-        System.out.println(customers);
+
         customersListPanel.setCustomers(customers);
     }
 

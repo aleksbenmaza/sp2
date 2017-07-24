@@ -1,8 +1,8 @@
-package app.core.business.model.mapping.damage;
+package business.model.mapping.damage;
 
-import app.core.business.exc.BusinessException;
-import app.core.business.model.mapping.CarDealer;
-import app.core.business.model.mapping.sinister.Sinister;
+import business.exc.BusinessException;
+import business.model.mapping.CarDealer;
+import business.model.mapping.sinister.Sinister;
 
 import javax.persistence.*;
 
@@ -32,5 +32,8 @@ public class Spoilage extends Damage {
     public void setCarDealer(CarDealer carDealer) {
         carDealer.addSpoilage(this);
         this.carDealer = carDealer;
+    }
+
+    Spoilage() {
     }
 }

@@ -1,14 +1,13 @@
-package app.core.business.model.mapping.sinister;
+package business.model.mapping.sinister;
 
 
-import app.core.business.model.mapping.IdentifiableByIdImpl;
-import app.core.business.model.mapping.Insurance;
+import business.model.mapping.IdentifiableByIdImpl;
+import business.model.mapping.Insurance;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import business.model.mapping.Vehicle;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +20,7 @@ import java.util.Set;
 public class PlainSinister extends Sinister {
 
     @Entity
-    @Table(name  = "types_sinistres_sans_tiers")
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    @Table(name = "types_sinistres_sans_tiers")
     public static class Type extends IdentifiableByIdImpl {
 
         @Column(unique = true)
@@ -42,7 +40,7 @@ public class PlainSinister extends Sinister {
                                                      referencedColumnName = "id")})
         private Set<Insurance> insurances;
 
-        public Type(){
+        public Type() {
             plainSinisters = new HashSet<PlainSinister>();
             insurances     = new HashSet<Insurance>();
         }
@@ -84,7 +82,8 @@ public class PlainSinister extends Sinister {
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
 
-    public PlainSinister(Type type) {
+    public PlainSinister(Vehicle vehicle, Type type) {
+        super(vehicle);
         type.plainSinisters.add(this);
         this.type = type;
     }
@@ -94,6 +93,5 @@ public class PlainSinister extends Sinister {
     }
 
     PlainSinister() {
-
     }
 }

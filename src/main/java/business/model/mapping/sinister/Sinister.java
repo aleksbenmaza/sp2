@@ -1,9 +1,9 @@
-package app.core.business.model.mapping.sinister;
+package business.model.mapping.sinister;
 
 
 
-import app.core.business.model.mapping.*;
-import app.core.business.model.mapping.damage.Damage;
+import business.model.mapping.*;
+import business.model.mapping.damage.Damage;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -18,21 +18,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "sinistres")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Sinister extends IdentifiableByIdImpl implements  ToBeChecked {
+public abstract class Sinister extends IdentifiableByIdImpl implements ToBeChecked {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicule_id", referencedColumnName = "id")
     protected Vehicle vehicle;
 
-    @OneToOne(mappedBy = "sinister",
-              fetch    = FetchType.EAGER,
+    @OneToOne(mappedBy = "id.sinister",
               cascade  = CascadeType.ALL)
-    protected transient Coverage coverage;
+    protected Coverage coverage;
 
-    @OneToOne(mappedBy = "sinister",
-              fetch    = FetchType.EAGER,
+    @OneToOne(mappedBy = "id.sinister",
               cascade  = CascadeType.ALL)
-    protected transient Damage damage;
+    protected Damage damage;
 
     @Column
     protected Date date;

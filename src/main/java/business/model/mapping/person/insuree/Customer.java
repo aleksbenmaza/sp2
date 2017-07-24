@@ -1,17 +1,15 @@
-package app.core.business.model.mapping.person.insuree;
+package business.model.mapping.person.insuree;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
-import app.core.business.model.mapping.ToBeChecked;
-import app.core.business.model.mapping.Contract;
-import app.core.business.model.mapping.UserAccount;
-import app.core.business.model.mapping.person.Admin;
-import app.core.business.model.mapping.person.RegisteredUser;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import business.model.mapping.ToBeChecked;
+import business.model.mapping.Contract;
+import business.model.mapping.UserAccount;
+import business.model.mapping.person.Manager;
+import business.model.mapping.person.RegisteredUser;
 
 @Entity
 @Table(name = "clients")
@@ -29,29 +27,28 @@ public class Customer extends Insuree implements RegisteredUser, ToBeChecked {
 	@Column(name = "statut")
 	private Status status;
 
-	@Fetch(FetchMode.JOIN)
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "admin_id", referencedColumnName = "id")
-	private Admin admin;
+	private Manager admin;
 
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Contract> contracts;
 
 	public Customer() {
 		contracts = new HashSet<Contract>();
 	}
 
-	public Customer(Admin admin) {
+	public Customer(Manager admin) {
 		this();
 		this.admin = admin;
 		admin.addCustomer(this);
 	}
 
-	public Admin getAdmin() {
+	public Manager getAdmin() {
 		return admin;
 	}
 
-	public void setAdmin(Admin admin) {
+	public void setAdmin(Manager admin) {
 		this.admin = admin;
 		if(admin != null)
 			admin.addCustomer(this);
@@ -94,7 +91,7 @@ public class Customer extends Insuree implements RegisteredUser, ToBeChecked {
 	}
 
 	public Set<Contract> getContracts() {
-		return new HashSet<Contract>(contracts);
+		return(contracts);
 	}
 
 	public boolean addContract(Contract contract) {

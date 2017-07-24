@@ -1,7 +1,7 @@
-package app.core.business.model.dao;
+package business.model.dao;
 
-import app.core.business.model.mapping.Entity;
-import app.core.business.model.mapping.Token;
+import business.model.mapping.Entity;
+import business.model.mapping.Token;
 
 import java.util.Set;
 

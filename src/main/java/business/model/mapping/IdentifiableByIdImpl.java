@@ -1,4 +1,4 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,8 +19,4 @@ public abstract class IdentifiableByIdImpl extends Entity implements Identifiabl
         return id;
     }
 
-    @Override
-    public int hashCode() {
-        return (int) (id ^ (id >>> 32));
-    }
 }

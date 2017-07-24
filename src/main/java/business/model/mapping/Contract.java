@@ -1,6 +1,6 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
-import app.core.business.model.mapping.person.insuree.Customer;
+import business.model.mapping.person.insuree.Customer;
 
 import javax.persistence.*;
 import javax.persistence.Entity;

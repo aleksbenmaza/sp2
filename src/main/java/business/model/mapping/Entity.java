@@ -1,8 +1,8 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import static java.util.Arrays.copyOf;
 
-import app.core.business.model.mapping.person.RegisteredUser;
+import business.model.mapping.person.RegisteredUser;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;

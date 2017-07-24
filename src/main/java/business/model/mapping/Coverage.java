@@ -1,13 +1,13 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
-import app.core.business.exc.BusinessException;
-import app.core.business.model.mapping.person.Expert;
-import app.core.business.model.mapping.sinister.Sinister;
+import business.exc.BusinessException;
+import business.model.mapping.person.Expert;
+import business.model.mapping.sinister.Sinister;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.io.Serializable;
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by alexandremasanes on 03/04/2017.
@@ -16,10 +16,39 @@ import java.util.Objects;
 @Table(name = "sinistres_contrats_experts")
 public class Coverage implements Serializable {
 
-    @Id
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sinistre_id", referencedColumnName = "id")
-    private Sinister sinister;
+    @Embeddable
+    public static class Id implements Serializable {
+
+        @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+        @JoinColumn(name = "sinistre_id", referencedColumnName = "id")
+        private Sinister sinister;
+
+        public Id(Sinister sinister) {
+            this.sinister = requireNonNull(sinister);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Id id = (Id) o;
+
+            return sinister != null ? sinister.equals(id.sinister) : id.sinister == null;
+        }
+
+        @Override
+        public int hashCode() {
+            return sinister != null ? sinister.hashCode() : 0;
+        }
+
+        Id() {
+
+        }
+    }
+
+    @EmbeddedId
+    Id id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "contrat_id", referencedColumnName = "id")
@@ -32,20 +61,20 @@ public class Coverage implements Serializable {
     public Coverage(Sinister sinister, Contract contract) {
         if(contract.getVehicle() != sinister.getVehicle() || contract.getVehicle().getId() != sinister.getVehicle().getId())
             throw new BusinessException();
-        this.sinister = Objects.requireNonNull(sinister);
-        this.contract = Objects.requireNonNull(contract);
+        this.id = new Id(sinister);
+        this.contract = requireNonNull(contract);
         sinister.setCoverage(this);
         contract.addCoverage(this);
     }
 
     public Coverage(Sinister sinister, Contract contract, Expert expert) {
         this(sinister, contract);
-        this.expert = Objects.requireNonNull(expert);
+        this.expert = requireNonNull(expert);
         expert.addCoverage(this);
     }
 
     public Sinister getSinister() {
-        return sinister;
+        return id.sinister;
     }
 
     public Contract getContract() {
@@ -68,22 +97,12 @@ public class Coverage implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Coverage coverage = (Coverage) o;
-
-        if (sinister != null ? !sinister.equals(coverage.sinister) : coverage.sinister != null) return false;
-        if (contract != null ? !contract.equals(coverage.contract) : coverage.contract != null) return false;
-        return expert != null ? expert.equals(coverage.expert) : coverage.expert == null;
+        return id.equals(o);
     }
 
     @Override
     public int hashCode() {
-        int result = sinister != null ? sinister.hashCode() : 0;
-        result = 31 * result + (contract != null ? contract.hashCode() : 0);
-        result = 31 * result + (expert != null ? expert.hashCode() : 0);
-        return result;
+        return id.hashCode();
     }
 
     Coverage() {

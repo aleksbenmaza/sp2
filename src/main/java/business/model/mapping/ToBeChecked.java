@@ -1,4 +1,4 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;

@@ -1,7 +1,7 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
-import app.core.business.exc.BusinessException;
-import app.core.business.model.mapping.UserAccount;
+import business.exc.BusinessException;
+import business.model.mapping.UserAccount;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Generated;

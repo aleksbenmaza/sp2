@@ -1,9 +1,9 @@
-package app.core.business.model.mapping.damage;
+package business.model.mapping.damage;
 
 
-import app.core.business.exc.BusinessException;
-import app.core.business.model.mapping.Deductible;
-import app.core.business.model.mapping.sinister.Sinister;
+import business.exc.BusinessException;
+import business.model.mapping.Deductible;
+import business.model.mapping.sinister.Sinister;
 
 import javax.persistence.*;
 
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "dommages")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // + embeddedId = MESS
-public abstract class Damage extends app.core.business.model.mapping.Entity implements Serializable {
+public abstract class Damage extends business.model.mapping.Entity implements Serializable {
 
     @Embeddable
     public static class Id implements Serializable {
@@ -28,7 +28,7 @@ public abstract class Damage extends app.core.business.model.mapping.Entity impl
         protected Sinister sinister;
 
         public Id(Sinister sinister) {
-            this.sinister = sinister;
+            this.sinister = requireNonNull(sinister);
         }
 
         @Override
@@ -63,7 +63,7 @@ public abstract class Damage extends app.core.business.model.mapping.Entity impl
     protected float amount;
 
     public Damage(Sinister sinister) {
-        if(requireNonNull(sinister) != null && sinister.getDamage() != null)
+        if(sinister.getDamage() != null)
             throw new BusinessException();
         this.id = new Id(sinister);
         sinister.setDamage(this);
@@ -92,5 +92,7 @@ public abstract class Damage extends app.core.business.model.mapping.Entity impl
         return id.hashCode();
     }
 
-    Damage() {}
+    Damage() {
+
+    }
 }

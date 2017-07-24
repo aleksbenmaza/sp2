@@ -4,7 +4,6 @@ package business.model.mapping.person;
 
 import business.model.mapping.ToBeChecked;
 import business.model.mapping.UserAccount;
-import app.core.web.model.session.User;
 
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;

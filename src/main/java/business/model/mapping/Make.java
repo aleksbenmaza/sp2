@@ -1,4 +1,4 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
 
 import org.hibernate.annotations.*;
@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +38,7 @@ public class Make extends IdentifiableByIdImpl {
         this.name = name;
     }
 
-    public boolean add(Model model) {
+    public boolean addModel(Model model) {
         return models.add(requireNonNull(model));
     }
 

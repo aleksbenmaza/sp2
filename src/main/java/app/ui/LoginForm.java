@@ -18,6 +18,8 @@ public class LoginForm extends View {
 
     private JPanel main;
 
+    private JButton lostPwdButton;
+
     {
         setContentPane(main);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -34,6 +36,10 @@ public class LoginForm extends View {
 
     public JButton getButton() {
         return button;
+    }
+
+    public JButton getLostPwdButton() {
+        return lostPwdButton;
     }
 
     public JPanel getMain() {

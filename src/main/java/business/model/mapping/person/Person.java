@@ -1,10 +1,10 @@
-package app.core.business.model.mapping.person;
+package business.model.mapping.person;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 
-import app.core.business.model.mapping.IdentifiableByIdImpl;
-import app.core.business.model.mapping.UserAccount;
+import business.model.mapping.IdentifiableByIdImpl;
+import business.model.mapping.UserAccount;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

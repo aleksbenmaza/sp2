@@ -1,6 +1,6 @@
-package app.core.business.model.mapping;
+package business.model.mapping;
 
-import app.core.business.model.mapping.damage.Damage;
+import business.model.mapping.damage.Damage;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;

@@ -1,8 +1,8 @@
-package app.core.business.model.mapping.revision;
+package business.model.mapping.revision;
 
-import app.core.business.model.mapping.Contract;
-import app.core.business.model.mapping.Vehicle;
-import app.core.business.model.mapping.person.insuree.Insuree;
+import business.model.mapping.Contract;
+import business.model.mapping.Vehicle;
+import business.model.mapping.person.insuree.Insuree;
 
 import javax.persistence.*;
 import java.util.Date;

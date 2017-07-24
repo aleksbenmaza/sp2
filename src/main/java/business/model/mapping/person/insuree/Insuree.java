@@ -1,4 +1,4 @@
-package app.core.business.model.mapping.person.insuree;
+package business.model.mapping.person.insuree;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import app.core.business.model.mapping.Vehicle;
-import app.core.business.model.mapping.person.Person;
+import business.model.mapping.Vehicle;
+import business.model.mapping.person.Person;
 
 @Entity
 @Table(name = "assures")
@@ -45,7 +45,7 @@ public abstract class Insuree extends Person implements Serializable {
 	}
 
 	public Set<Vehicle> getVehicles() {
-		return new HashSet<Vehicle>(vehicles);
+		return(vehicles);
 	}
 
 

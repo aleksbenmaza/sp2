@@ -2,6 +2,8 @@ package business.logic;
 
 import business.model.dao.DAO;
 import business.model.mapping.Entity;
+import business.model.mapping.IdentifiableById;
+import business.model.mapping.IdentifiableByIdImpl;
 import helper.MessageHelper;
 
 import javax.inject.Inject;
@@ -18,8 +20,8 @@ public abstract class BaseService<T extends Entity> {
     @Inject
     private MessageHelper messageHelper;
 
-    public void refresh(T entity) {
-        dao.refresh(entity);
+    public  IdentifiableByIdImpl refresh(IdentifiableByIdImpl entity) {
+        return dao.refresh(entity);
     }
 
     public void save(T entity) { dao.save(entity);}

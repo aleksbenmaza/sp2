@@ -1,6 +1,6 @@
-package app.core.business.model.mapping.revision;
+package business.model.mapping.revision;
 
-import app.core.business.model.mapping.IdentifiableById;
+import business.model.mapping.IdentifiableById;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.GeneratedValue;

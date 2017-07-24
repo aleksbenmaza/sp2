@@ -3,7 +3,7 @@
     <session-factory>
          <!-- Related to the connection START -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://192.168.0.52:3306/aaa?serverTimezone=UTC&amp;useSSL=false&amp;noAccessToProcedureBodies=true&amp;autoReconnect=true</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/aaa?serverTimezone=UTC&amp;useSSL=false&amp;noAccessToProcedureBodies=true</property>
         <property name="connection.user">${db_usr}</property>
         <property name="connection.password">${db_pwd}</property>
         <!-- Related to the connection END -->
@@ -11,7 +11,7 @@
         <property name="transaction.auto_close_session">false</property>
         <property name="id.new_generator_mappings">false</property>
         <property name="enable_lazy_load_no_trans">true</property>
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- Related to hibernate properties END -->
         <!-- Related to c3p0 properties START -->
